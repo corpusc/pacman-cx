@@ -158,26 +158,26 @@ func drawPacMan(position Position2D, radius f32, color Color, forLives bool) {
   var full_angle f32 = f32.mul(2.0, 3.141592654)
   var x f32
   var y f32
-  var facing i32 = main.PLAYER_FACING
+  var dir i32 = main.player.direction
   
   if forLives {
-    facing = main.LEFT
+    dir = main.LEFT
   }
 
   // angles in degrees
   var start f32
   var end f32
   
-  if facing == main.UP {
+  if dir == main.UP {
     start = 22.5
   }else
-  if facing == main.RIGHT {
+  if dir == main.RIGHT {
     start = 112.5
   }else
-  if facing == main.DOWN {
+  if dir == main.DOWN {
     start = 202.5
   }else
-  if facing == main.LEFT {
+  if dir == main.LEFT {
     start = 292.5
   }
   

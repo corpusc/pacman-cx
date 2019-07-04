@@ -44,7 +44,6 @@ var LEFT i32 = 2
 var RIGHT i32 = 3
 
 // Player constants
-var PLAYER_FACING i32 = LEFT
 var PLAYER_COLOR_RED f32 = 1.0
 var PLAYER_COLOR_GREEN f32 = 1.0
 var PLAYER_COLOR_BLUE f32 = 0.0
@@ -78,17 +77,7 @@ var LIFE_COLOR_GREEN f32 = 0.0
 var LIFE_COLOR_BLUE f32 = 0.0
 var LIFE_RADIUS f32 = 0.02
 
-// Declaration of structss
-type Player struct {
-  position graphical2d.Position2D      // 2D position (x, y)
-  color graphical2d.Color              // RGB color (r, g, b)
-  radius f32
-  direction i32
-  index_x i32
-  index_y i32
-}
-var player Player
-
+// structs
 type Cell struct {
   position graphical2d.Position2D
   dimensions graphical2d.Dimensions2D
@@ -127,29 +116,6 @@ var points_count i32 = 0
 /***************************************
  * Declaration of constructor functions.
 ***************************************/
-
-/* Function     : newPlayer
-   Input        : Spawn line (line i32)
-                : Spawn column (column i32)
-                : Radius (rad f32)
-   Output       : player (pl Player)
-   Description  : Constructor for the Player struct.
-*/
-func newPlayer (line i32, column i32, rad f32) (pl Player) {
-  var pos graphical2d.Position2D
-  pos = coords2position(line, column)
-
-  var col graphical2d.Color
-  col = graphical2d.newColor(PLAYER_COLOR_RED, PLAYER_COLOR_GREEN, PLAYER_COLOR_BLUE)
-
-  pl = Player{
-    position: pos,
-    color: col,
-    radius: rad,
-    direction: RIGHT,
-    index_x: column,
-    index_y: line}
-}
 
 /* Function     : newCell
    Input        : Spawn line (line i32)
@@ -308,30 +274,25 @@ func canMove(direction i32, line i32, column i32) (can_move bool)  {
    Input        : Direction in which the player should move (direction i32)
    Description  : Manages the player movement.
 */
-func movePlayer(direction i32) () {
+func movePlayer(direction i32) {
   latestPlayerMoveEvent = glfw.GetTime()
-  PLAYER_FACING = direction
 
   if bool.eq(canMove(direction, player.index_y, player.index_x), true) {
-    // Move Up
-    if i32.eq(direction, UP) {
+    // Moves 
+    if direction == UP {
       player.index_y = i32.sub(player.index_y, 1)
-    }
-    // Move Down
-    if i32.eq(direction, DOWN) {
+    } else
+    if direction == DOWN {
       player.index_y = i32.add(player.index_y, 1)
-    }
-    // Move Left
-    if i32.eq(direction, LEFT) {
+    } else
+    if direction == LEFT {
       player.index_x = i32.sub(player.index_x, 1)
-    }
-    // Move Right
-    if i32.eq(direction, RIGHT) {
+    } else
+    if direction == RIGHT {
       player.index_x = i32.add(player.index_x, 1)
     }
-    // Update the current player direction
+    
     player.direction = direction
-    // Update the player position
     player.position = coords2position(player.index_y, player.index_x)
   }
 

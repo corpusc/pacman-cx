@@ -7,7 +7,7 @@ package main
 /* Function     : initGLFW
    Description  : Initializes the game window and keyboard input manager.
 */
-func initGLFW() () {
+func initGLFW() {
   glfw.Init()
 
   glfw.CreateWindow("window", WIDTH_WINDOW, HEIGHT_WINDOW, "PAC-MAN CX 0.0.3")
@@ -55,7 +55,12 @@ var GLFW_KEY_D i32 = 68
    Description  : fired per keyboard event
 */
 func keyboardEvent(window str, key i32, scancode i32, action i32, mods i32) {
-  if gameMode == GAMEMODE_PLAYING {
+    if key == 53 { // GLFW_KEY_5 
+      str.print("you pressed 5 ^^^^^^^^^^^^^^^^^ QUITTING GAME ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+      glfw.SetShouldClose("window", true)
+    }
+  
+    if gameMode == GAMEMODE_PLAYING {
     if action == 1 {
       if eventingRight(key) {
         movePlayer(RIGHT)

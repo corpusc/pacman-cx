@@ -2,11 +2,12 @@ package main
 
 import "graphical2d"
 
+
 /* Function     : initScene
    Description  : Initializes all game objects including the board cells, the
                   points, the ghosts and the player.
 */
-func initScene() () {
+func initScene() {
   // Initialize game board items
   var line [28]i32
   

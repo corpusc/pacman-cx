@@ -54,6 +54,7 @@ var GHOST_RELEASE_MODIFIER f64 = 0.5D
 var GHOST_CHASE_MODIFIER f64 = 2.0D
 var GHOST_SCATTER_MODIFIER f64 = 0.5D
 
+
 /* Function     : canMove
    Input        : Ghost to move (ghost Ghost)
    Description  : Manages the player movement.

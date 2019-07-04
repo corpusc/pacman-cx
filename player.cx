@@ -1,0 +1,42 @@
+package main
+
+// structs
+type Player struct {
+  prev_pos graphical2d.Position2D      // 2D position (x, y)
+  position graphical2d.Position2D      // 2D position (x, y)
+  color graphical2d.Color              // RGB color (r, g, b)
+  radius f32
+  direction i32
+  index_x i32
+  index_y i32
+}
+var player Player
+
+
+/***************************************
+ * Declaration of constructor functions.
+***************************************/
+
+/* Function     : newPlayer
+   Input        : Spawn line (line i32)
+                : Spawn column (column i32)
+                : Radius (rad f32)
+   Output       : player (pl Player)
+   Description  : Constructor for the Player struct.
+*/
+func newPlayer (line i32, column i32, rad f32) (pl Player) {
+  var pos graphical2d.Position2D
+  pos = coords2position(line, column)
+
+  var col graphical2d.Color
+  col = graphical2d.newColor(PLAYER_COLOR_RED, PLAYER_COLOR_GREEN, PLAYER_COLOR_BLUE)
+
+  pl = Player{
+    prev_pos: pos,
+    position: pos,
+    color: col,
+    radius: rad,
+    direction: LEFT,
+    index_x: column,
+    index_y: line}
+}
