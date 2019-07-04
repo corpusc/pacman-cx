@@ -4,15 +4,7 @@ import "gl"
 import "glfw"
 import "graphical2d"
 
-var x_cells i32 = 28
-var y_cells i32 = 31
-
-var CELL_WIDTH f32 = 0.07143
-var CELL_HEIGHT f32 = 0.0645
-var CELL_HALF_WIDTH f32 = CELL_WIDTH / 2.0
-var CELL_HALF_HEIGHT f32 = CELL_HEIGHT / 2.0
-
-// Game "constants"
+// Game constants
 var WIDTH_WINDOW i32 = 840
 var HEIGHT_WINDOW i32 = 930
 
@@ -22,39 +14,12 @@ var GAME_MAX_LEVEL i32 = 10
 var GAME_OVER bool = false
 var PLAYER_LIVES i32 = 3
 
-// Item Types
-var PATH_CELL i32 = 3
-var WALL_CELL i32 = 1
-var PATH_CELL_WITH_SIMPLE_POINT i32 = 0
-var PATH_CELL_WITH_SUPER_POINT i32 = 2
-var TELEPORT_CELL i32 = 4
-var GATE_CELL i32 = 5
-
-// Point constants
-var SIMPLE_POINT_RADIUS f32 = 0.01
-var SUPER_POINT_RADIUS f32 = 0.015
-var POINT_COLOR_RED f32 = 1.0
-var POINT_COLOR_GREEN f32 = 1.0
-var POINT_COLOR_BLUE f32 = 1.0
-
 // Directions
 var UP i32 = 0
 var DOWN i32 = 1
 var LEFT i32 = 2
 var RIGHT i32 = 3
 
-// Animation timers
-var POINT_ANIMATION_TIMER f64 = 0.0D
-var POINT_ANIMATION_SEMI_LIMIT f64 = 0.2D
-var POINT_ANIMATION_LIMIT f64 = 0.4D
-
-// Lives Variables
-var LIFE_SPAWN_LINE i32 = 30
-var LIFE_SPAWN_COLUMN i32 = 26
-var LIFE_COLOR_RED f32 = 1.0
-var LIFE_COLOR_GREEN f32 = 0.0
-var LIFE_COLOR_BLUE f32 = 0.0
-var LIFE_RADIUS f32 = 0.02
 
 // structs
 type Cell struct {
