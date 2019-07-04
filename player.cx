@@ -14,11 +14,6 @@ var PLAYER_LIVES i32 = 3
 var nextLifePos graphical2d.Position2D
 var latestPlayerMoveEvent f64
 
-// Animation timers
-var PLAYER_ANIMATION_TIMER f64 = 0.0D
-var PLAYER_ANIMATION_SEMI_LIMIT f64 = 0.25D
-var PLAYER_ANIMATION_LIMIT f64 = 0.5D
-
 
 // structs
 type Player struct {

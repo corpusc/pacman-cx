@@ -112,24 +112,6 @@ func renderPlayer() {
   }
 
   graphical2d.drawPacMan(pos, player.radius, player.color, false)
-  return
-
-  // LEAVING THE ORIGINAL CODE, but bypassing it because
-  // now the mouth smoothly animates.  no more need to....
-
-
-
-  // ....bounce back & forth between just 2 frames
-  // (completely closed, or completely open)
-  if isTimerOver(PLAYER_ANIMATION_TIMER, PLAYER_ANIMATION_SEMI_LIMIT) {
-    graphical2d.drawPacMan(player.position, player.radius, player.color, false)
-  } else {
-    graphical2d.drawCircle(player.position, player.radius, player.color)
-  }
-
-  if isTimerOver(PLAYER_ANIMATION_TIMER, PLAYER_ANIMATION_LIMIT) {
-    PLAYER_ANIMATION_TIMER = glfw.GetTime()
-  }
 }
 
 /* Function     : renderGhost
