@@ -43,28 +43,7 @@ var DOWN i32 = 1
 var LEFT i32 = 2
 var RIGHT i32 = 3
 
-// Player constants
-var PLAYER_COLOR_RED f32 = 1.0
-var PLAYER_COLOR_GREEN f32 = 1.0
-var PLAYER_COLOR_BLUE f32 = 0.0
-var PLAYER_RADIUS f32 = 0.025
-var PLAYER_SPAWN_LINE i32 = 23
-var PLAYER_SPAWN_COLUMN i32 = 13
-
-// Player vars 
-var SCORE i32 = 0
-var latestPlayerMoveEvent f64
-var nextLifePos graphical2d.Position2D
-
 // Animation timers
-var PLAYER_ANIMATION_TIMER f64 = 0.0D
-var PLAYER_ANIMATION_SEMI_LIMIT f64 = 0.25D
-var PLAYER_ANIMATION_LIMIT f64 = 0.5D
-
-var GHOST_ANIMATION_TIMER f64 = 0.0D
-var GHOST_ANIMATION_SEMI_LIMIT f64 = 0.25D
-var GHOST_ANIMATION_LIMIT f64 = 0.5D
-
 var POINT_ANIMATION_TIMER f64 = 0.0D
 var POINT_ANIMATION_SEMI_LIMIT f64 = 0.2D
 var POINT_ANIMATION_LIMIT f64 = 0.4D
@@ -267,38 +246,5 @@ func canMove(direction i32, line i32, column i32) (can_move bool)  {
   }
   if bool.and(i32.eq(direction, RIGHT), i32.eq(cells[line][i32.add(column, 1)].ctype, PATH_CELL)) {
     can_move = true
-  }
-}
-
-/* Function     : movePlayer
-   Input        : Direction in which the player should move (direction i32)
-   Description  : Manages the player movement.
-*/
-func movePlayer(direction i32) {
-  latestPlayerMoveEvent = glfw.GetTime()
-
-  if bool.eq(canMove(direction, player.index_y, player.index_x), true) {
-    // Moves 
-    if direction == UP {
-      player.index_y = i32.sub(player.index_y, 1)
-    } else
-    if direction == DOWN {
-      player.index_y = i32.add(player.index_y, 1)
-    } else
-    if direction == LEFT {
-      player.index_x = i32.sub(player.index_x, 1)
-    } else
-    if direction == RIGHT {
-      player.index_x = i32.add(player.index_x, 1)
-    }
-    
-    player.direction = direction
-    player.position = coords2position(player.index_y, player.index_x)
-  }
-
-  // Check for collisions with ghosts
-  // FIX ME remove double collision check
-  for i:=0; i<4; i++ {
-    checkPlayerGhostCollision(ghosts[i])
   }
 }
