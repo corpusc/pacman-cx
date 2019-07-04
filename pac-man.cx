@@ -11,8 +11,6 @@ var HEIGHT_WINDOW i32 = 930
 // Game flags
 var GAME_LEVEL i32 = 1
 var GAME_MAX_LEVEL i32 = 10
-var GAME_OVER bool = false
-var PLAYER_LIVES i32 = 3
 
 // Directions
 var UP i32 = 0

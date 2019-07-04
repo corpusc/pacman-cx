@@ -8,6 +8,7 @@ var GAMEMODE_PLAYING  i32 = 1
 var GAMEMODE_WONBOARD i32 = 2
 var GAMEMODE_DYING    i32 = 3
 var GAMEMODE_GAMEOVER i32 = 4
+
 var gameMode i32
 
 func main() {
@@ -21,7 +22,9 @@ func main() {
   initScene()
 
   // Game loop
-  for bool.and(bool.not(glfw.ShouldClose("window")), bool.not(GAME_OVER)) {
+  for bool.not(glfw.ShouldClose("window")) &&
+      gameMode != GAMEMODE_GAMEOVER {
+    
     if gameMode == GAMEMODE_GETREADY {
       if isTimerOver(GETREADY_TIMER, GETREADY_LIMIT) {
         gameMode = GAMEMODE_PLAYING
