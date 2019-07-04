@@ -32,6 +32,15 @@ func isTimerOver(timer f64, limit f64) (is_over bool) {
   }
 }
 
+func getLerpTween(a Position2D, b Position2D, timer f64, limit f64) (out Position2D) {
+  var xDelta f32 = b.x - a.x
+  var yDelta f32 = b.y - a.y
+  var timeDelta f64 = glfw.GetTime() - timer
+  var frac f32 = f64.f32(timeDelta / limit)
+  out.x = f32.add(a.x, f32.mul(frac, xDelta))
+  out.y = f32.add(a.y, f32.mul(frac, yDelta))
+}
+
 
 
 // Collision manager functions

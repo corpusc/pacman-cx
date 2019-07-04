@@ -63,6 +63,7 @@ func newPlayer (line i32, column i32, rad f32) (pl Player) {
 */
 func movePlayer(direction i32) {
   latestPlayerMoveEvent = glfw.GetTime()
+  player.prev_pos = coords2position(player.index_y, player.index_x)
 
   if bool.eq(canMove(direction, player.index_y, player.index_x), true) {
     // Moves 

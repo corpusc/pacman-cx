@@ -99,16 +99,11 @@ func renderBoard() {
    Description  : Renders the player
 */
 func renderPlayer() {
-  var pos Position2D
-  pos = player.position
+  var pos Position2D = player.position
   
   if gameMode == GAMEMODE_GETREADY {    
-    var xDelta f32 = pos.x - nextLifePos.x
-    var yDelta f32 = pos.y - nextLifePos.y
-    var timeDelta f64 = glfw.GetTime() - GETREADY_TIMER
-    var frac f32 = f64.f32(timeDelta / GETREADY_LIMIT)
-    pos.x = f32.add(nextLifePos.x, f32.mul(frac, xDelta))
-    pos.y = f32.add(nextLifePos.y, f32.mul(frac, yDelta))
+    pos = getLerpTween(nextLifePos, pos, 
+      GETREADY_TIMER, GETREADY_LIMIT)
   }
 
   graphical2d.drawPacMan(pos, player.radius, player.color, false)
