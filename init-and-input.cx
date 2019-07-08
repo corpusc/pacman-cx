@@ -27,6 +27,8 @@ func initGLFW() {
 func initOpenGL() (program i32) {
 	program = gl.CreateProgram()
   gl.LinkProgram(program)
+  gl.Enable(gl.TEXTURE_2D)
+  gl.UseProgram(program)
 }
 
 
@@ -55,74 +57,177 @@ var GLFW_KEY_D i32 = 68
    Description  : fired per keyboard event
 */
 func keyboardEvent(window str, key i32, scancode i32, action i32, mods i32) {
-    if key == 53 { // GLFW_KEY_5 
-      str.print("you pressed 5 ^^^^^^^^^^^^^^^^^ QUITTING GAME ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-      glfw.SetShouldClose("window", true)
-    }
+  if key == 53 { // GLFW_KEY_5 
+    str.print("you pressed 5 ^^^^^^^^^^^^^^^^^ QUITTING GAME ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    glfw.SetShouldClose("window", true)
+  }
   
-    if gameMode == GAMEMODE_PLAYING {
+  if gameMode == GAMEMODE_MENU {
     if action == 1 {
-      if eventingRight(key) {
-        movePlayer(RIGHT)
+      if eventRight(key) {
       }
-      if eventingLeft(key) {
-        movePlayer(LEFT)
+      if eventLeft(key) {
       }
-      if eventingDown(key) {
-        movePlayer(DOWN)
+      if eventDown(key) {
       }
-      if eventingUp(key) {
-        movePlayer(UP)
+      if eventUp(key) {
       }
+    }
+  }
+}
+
+/* Function     : getPosAfterLiningUpWithTunnel
+   Description  : apply time-delta-based distance across 2 directions.
+                  1st, move towards the exact center of the tunnel 
+                  (valid cell-exit direction) that player is pushing
+                  towards.  THEN start moving in the pushed direction.
+*/
+func lineUpWithTunnelBeforeGoing(dir i32, dist f32, pos Position2D) {
+  var f f32
+  
+  if dir == LEFT || dir == RIGHT {
+    f = player.cell_pos.y
+  } else { // up or down
+    f = player.cell_pos.x
+  }
+  
+  if f > 0.0 {
+    f = f32.sub(
+    f, dist)
+    
+    if f < 0.0 {
+      dist = f32.sub(
+      dist, f32.abs(f))
+      f = 0.0
+    }
+  }
+
+  if f < 0.0 {
+    f = 
+    f + dist
+    
+    if f > 0.0 {
+      dist = f32.sub(
+      dist, f)
+      f = 0.0
+    }
+  }
+
+  if dir == LEFT || dir == RIGHT {
+    player.cell_pos.y = f
+  } else
+  if dir == DOWN || dir == UP {
+    player.cell_pos.x = f
+  }
+  
+  if dist > 0.0 {
+    if dir == LEFT {
+      player.cell_pos.x = f32.add(player.cell_pos.x, -dist)
+    } else
+    if dir == RIGHT {
+      player.cell_pos.x = f32.add(player.cell_pos.x, dist)
+    } else
+    if dir == DOWN {
+      player.cell_pos.y = f32.add(player.cell_pos.y, -dist)
+    } else
+    if dir == UP {
+      player.cell_pos.y = f32.add(player.cell_pos.y, dist)
     }
   }
 }
 
 /* Function     : movePlayerByHeldKeys
-   Description  : after moving all ghosts, poll for held down keys
+   Description  : poll for held down keys
 */
 func movePlayerByHeldKeys() {
+  prevTime  = currTime
+  currTime  = glfw.GetTime()
+  deltaTime = f64.f32(currTime - prevTime)
+  var dist f32 = deltaTime * player.speed // total move distance
+  
   if heldKeyforRight() {
-    movePlayer(RIGHT)
+    player.direction = RIGHT
+
+    if player.cell_pos.x < 0.0 || canMove(RIGHT, player.index_y, player.index_x) {
+      lineUpWithTunnelBeforeGoing(RIGHT, dist, player.cell_pos)
+      
+      if player.cell_pos.x > CELL_HALF_WIDTH {
+        player.cell_pos.x = f32.sub(player.cell_pos.x, CELL_WIDTH)
+        player.index_x = i32.add(player.index_x, 1)
+      }
+    }
+    //movePlayer(RIGHT)
   } else
   if heldKeyforLeft() {
-    movePlayer(LEFT)
+    player.direction = LEFT
+
+    if player.cell_pos.x > 0.0 || canMove(LEFT, player.index_y, player.index_x) {
+      lineUpWithTunnelBeforeGoing(LEFT, dist, player.cell_pos)
+      
+      if player.cell_pos.x < -CELL_HALF_WIDTH {
+        player.cell_pos.x = f32.add(player.cell_pos.x, CELL_WIDTH)
+        player.index_x = i32.sub(player.index_x, 1)
+      }
+    }
+    //movePlayer(LEFT)
   } else
   if heldKeyforDown() {
-    movePlayer(DOWN)
+    player.direction = DOWN
+
+    if player.cell_pos.y > 0.0 || canMove(DOWN, player.index_y, player.index_x) {
+      lineUpWithTunnelBeforeGoing(DOWN, dist, player.cell_pos)
+      
+      if player.cell_pos.y < -CELL_HALF_HEIGHT {
+        player.cell_pos.y = f32.add(player.cell_pos.y, CELL_HEIGHT)
+        player.index_y = i32.add(player.index_y, 1)
+      }
+    }
+    //movePlayer(DOWN)
   } else
   if heldKeyforUp() {
-    movePlayer(UP)
+    player.direction = UP
+
+    if player.cell_pos.y < 0.0 || canMove(UP, player.index_y, player.index_x) {
+      lineUpWithTunnelBeforeGoing(UP, dist, player.cell_pos)
+      
+      if player.cell_pos.y > CELL_HALF_HEIGHT {
+        player.cell_pos.y = f32.sub(player.cell_pos.y, CELL_HEIGHT)
+        player.index_y = i32.sub(player.index_y, 1)
+      }
+    }
+    //movePlayer(UP)
   }
+  
+  player.position = coords2position(player.index_y, player.index_x)
 }
 
 
 
-/* Functions    : eventing[Direction]
+/* Functions    : event[Direction]
    Description  : Checks 2 sets of keys for player's JUST_PRESSED direction
 */
-func eventingLeft(key i32) (out bool) {
+func eventLeft(key i32) (out bool) {
   if i32.eq(key, GLFW_KEY_A) ||
     i32.eq(key, LEFT_ARROW_KEY) {
     out = true
   }
 }
 
-func eventingRight(key i32) (out bool) {
+func eventRight(key i32) (out bool) {
   if i32.eq(key, GLFW_KEY_D) ||
     i32.eq(key, RIGHT_ARROW_KEY) {
     out = true
   }
 }
 
-func eventingDown(key i32) (out bool) {
+func eventDown(key i32) (out bool) {
   if i32.eq(key, GLFW_KEY_S) ||
     i32.eq(key, DOWN_ARROW_KEY) {
     out = true
   }
 }
 
-func eventingUp(key i32) (out bool) {
+func eventUp(key i32) (out bool) {
   if i32.eq(key, GLFW_KEY_W) ||
     i32.eq(key, UP_ARROW_KEY) {
     out = true

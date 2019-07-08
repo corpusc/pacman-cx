@@ -12,11 +12,9 @@ func renderGame(program i32) {
   var j i32
 
   gl.Clear(gl.COLOR_BUFFER_BIT)
-  gl.Enable(gl.TEXTURE_2D)
-  gl.UseProgram(program)
 
-  renderBoard()  // Render Board
-  renderPlayer() // Render Player
+  renderBoard()
+  renderPlayer()
 
   // Render Points
   for i=0; i<points_count; i++ {
@@ -30,7 +28,7 @@ func renderGame(program i32) {
       renderGhost(ghosts[i])
   }
 
-  renderLives() // Render Lives
+  renderLives()
   renderLevel()
   renderGhostEaterMeter()
 }
@@ -106,13 +104,20 @@ func renderPlayer() {
       GETREADY_TIMER, GETREADY_LIMIT)
   }
 
-  graphical2d.drawPacMan(pos, player.radius, player.color, false)
+  pos.x = f32.add(pos.x, player.cell_pos.x)
+  pos.y = f32.add(pos.y, player.cell_pos.y)
+  graphical2d.drawPlayer(pos, player.radius, player.color, false)
+
+  /*
+  var heartCol graphical2d.Color = graphical2d.newColor(LIFE_COLOR_RED, LIFE_COLOR_GREEN, LIFE_COLOR_BLUE)
+  graphical2d.drawLife(player.position, LIFE_RADIUS, heartCol)
+  */
 }
 
 /* Function     : renderGhost
    Description  : Renders a ghost
 */
-func renderGhost(ghost Ghost) () {
+func renderGhost(ghost Ghost) {
   var color graphical2d.Color
 
   if i32.eq(ghost.status, GHOST_MODE_FRIGHTENED) {
@@ -175,7 +180,7 @@ func renderLives() {
 
   for i:=0; i<numPacs; i++ {
     position = coords2position(LIFE_SPAWN_LINE, i32.sub(LIFE_SPAWN_COLUMN, i))
-    graphical2d.drawPacMan(position, CELL_HALF_WIDTH - 0.01, pacCol, true)
+    graphical2d.drawPlayer(position, CELL_HALF_WIDTH - 0.01, pacCol, true)
   }
 
   for i:=0; i<numHearts; i++ {

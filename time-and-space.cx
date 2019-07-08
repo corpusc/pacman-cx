@@ -1,5 +1,10 @@
 package main
 
+var prevTime f64
+var currTime f64
+var deltaTime f32
+
+
 func blinkStatusOn () (out bool) {
   var t f32 = f64.f32(glfw.GetTime())
   t = getValueUnderMax(t, 0.15)

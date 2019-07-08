@@ -12,16 +12,16 @@ var PLAYER_SPAWN_COLUMN i32 = 13
 var SCORE i32 = 0
 var PLAYER_LIVES i32 = 3
 var nextLifePos graphical2d.Position2D
-var latestPlayerMoveEvent f64
 
 
 // structs
 type Player struct {
-  prev_pos graphical2d.Position2D      // 2D position (x, y)
-  position graphical2d.Position2D      // 2D position (x, y)
-  color graphical2d.Color              // RGB color (r, g, b)
+  position graphical2d.Position2D // 2D position (x, y) in world space
+  cell_pos graphical2d.Position2D // position in occupied cell's local space
+  color graphical2d.Color         // RGB color (r, g, b)
   radius f32
   direction i32
+  speed f32
   index_x i32
   index_y i32
 }
@@ -47,11 +47,12 @@ func newPlayer (line i32, column i32, rad f32) (pl Player) {
   col = graphical2d.newColor(PLAYER_COLOR_RED, PLAYER_COLOR_GREEN, PLAYER_COLOR_BLUE)
 
   pl = Player{
-    prev_pos: pos,
     position: pos,
+    //cell_pos: 0.0,
     color: col,
     radius: rad,
     direction: LEFT,
+    speed: 0.4,
     index_x: column,
     index_y: line}
 }
@@ -62,9 +63,6 @@ func newPlayer (line i32, column i32, rad f32) (pl Player) {
    Description  : Manages the player movement.
 */
 func movePlayer(direction i32) {
-  latestPlayerMoveEvent = glfw.GetTime()
-  player.prev_pos = coords2position(player.index_y, player.index_x)
-
   if bool.eq(canMove(direction, player.index_y, player.index_x), true) {
     // Moves 
     if direction == UP {
@@ -81,7 +79,7 @@ func movePlayer(direction i32) {
     }
     
     player.direction = direction
-    player.position = coords2position(player.index_y, player.index_x)
+    //player.position = coords2position(player.index_y, player.index_x)
   }
 
   // Check for collisions with ghosts

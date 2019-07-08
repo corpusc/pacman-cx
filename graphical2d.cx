@@ -154,7 +154,7 @@ func drawCircle (position Position2D, radius f32, color Color) () {
   gl.End()
 }
 
-func drawPacMan(position Position2D, radius f32, color Color, forLives bool) {
+func drawPlayer(position Position2D, radius f32, color Color, forLives bool) {
   var full_angle f32 = f32.mul(2.0, 3.141592654)
   var x f32
   var y f32
